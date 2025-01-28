@@ -53,7 +53,7 @@ function rotate(z)
 end
 
 function handleModemMessage()
-    local modem = peripheral.wrap("left")
+    local modem = peripheral.find("modem")
     modem.open(1)
 
     while true do
