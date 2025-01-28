@@ -52,7 +52,29 @@ function rotate(z)
     end
 end
 
-function boxMine(width, length, depth, upOrDown)
+function handleModemMessage()
+    local modem = peripheral.wrap("left")
+    modem.open(1)
+
+    while true do
+        local event, side, channel, replyChannel, message, distance = os.pullEvent("modem_message")
+        if message.command == "move" and message.direction == "forward" then
+            for i = 1, message.blocks do
+                tMove()
+            end
+        elseif message.command == "turn" then
+            if message.direction == "left" then
+                turtle.turnLeft()
+            elseif message.direction == "right" then
+                turtle.turnRight()
+            end
+        end
+    end
+end
+
+
+
+function boxMine(width, length, depth, upOrDown) 
     width = width - 1
     for y = 1, depth do
         refuel()
@@ -80,6 +102,7 @@ function boxMine(width, length, depth, upOrDown)
             temp1 = temp1 + 1
         end
     end
+    handleModemMessage()
 end
 
 local args = {...}
